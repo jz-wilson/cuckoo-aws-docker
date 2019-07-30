@@ -40,7 +40,7 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN chown -R cuckoo:cuckoo . && \
 # Setup TCPDump
     groupadd pcap && usermod -a -G pcap cuckoo && \
-    chgrp pcap /usr/sbin/tcpdump && setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump
+    chgrp pcap /usr/sbin/tcpdump && setcap cap_net_raw+ep /usr/sbin/tcpdump
 
 USER cuckoo
 # Install Boto3 Requirement
