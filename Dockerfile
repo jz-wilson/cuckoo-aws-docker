@@ -44,7 +44,7 @@ RUN chown -R cuckoo:cuckoo . && \
 
 USER cuckoo
 # Install Boto3 Requirement
-RUN pip install boto3 configparser psycopg2 m2crypto
+RUN pip install boto3 configparser psycopg2 m2crypto ec2_metadata
 
 # Copy Files
 COPY files/conf/aws.conf $CUCKOO_DIR/cuckoo/private/cwd/conf/aws.conf

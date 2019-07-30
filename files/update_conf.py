@@ -2,11 +2,15 @@
 
 import os
 import sys
-import socket
+from ec2_metadata import ec2_metadata
 import ConfigParser
 
-hostname = socket.gethostname()
-IPAddr = socket.gethostbyname(hostname)
+if ec2_metadata.private_ipv4:
+    Host_IPAddr = ec2_metadata.private_ipv4
+elif os.environ['RESULTSERVER_IP']:
+    Host_IPAddr = os.environ['RESULTSERVER_IP']
+else:
+    Host_IPAddr = ""
 
 # Setting reporting.conf
 reporting_cfg = ConfigParser.ConfigParser()
@@ -36,7 +40,8 @@ with open(".cuckoo/conf/reporting.conf", 'w') as cfile:
 cuckoo_cfg = ConfigParser.ConfigParser()
 cuckoo_cfg.read(".cuckoo/conf/cuckoo.conf")
 with open(".cuckoo/conf/cuckoo.conf", 'w') as cfile:
-    cuckoo_cfg.set('resultserver', 'ip', IPAddr)
+    if Host_IPAddr:
+        cuckoo_cfg.set('resultserver', 'ip', '0.0.0.0')
     if os.environ.get('RESULTSERVER_PORT'):
         cuckoo_cfg.set('resultserver', 'port', os.environ['RESULTSERVER_PORT'])
     if os.environ.get('MACHINERY'):
@@ -72,9 +77,8 @@ with open(".cuckoo/conf/aws.conf", 'w') as cfile:
     aws_cfg.set('autoscale', 'autoscale', 'yes')
     if os.environ.get('GUEST_INSTANCE_TYPE'):
         aws_cfg.set('autoscale', 'instance_type', os.environ['GUEST_INSTANCE_TYPE'])
-    if os.environ.get('RESULTSERVER_HOST'):
-        aws_cfg.set('autoscale', 'resultserver_ip', IPAddr)
-    if os.environ.get('RESULTSERVER_HOST'):
+    aws_cfg.set('autoscale', 'resultserver_ip', Host_IPAddr)
+    if os.environ.get('RESULTSERVER_PORT'):
         aws_cfg.set('autoscale', 'resultserver_port', os.environ['RESULTSERVER_PORT'])
 
     aws_cfg.write(cfile)
