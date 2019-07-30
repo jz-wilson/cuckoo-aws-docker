@@ -50,6 +50,7 @@ with open(".cuckoo/conf/cuckoo.conf", 'w') as cfile:
         cuckoo_cfg.set('cuckoo', 'ignore_vulnerabilities', os.environ['VBOX_IGNORE_VULNERABILITIES'])
     if os.environ.get('API_TOKEN'):
         cuckoo_cfg.set('cuckoo', 'api_token', os.environ['API_TOKEN'])
+    cuckoo_cfg.set('timeouts', 'vm_state', 600)
     cuckoo_cfg.write(cfile)
 
 # Setting aws.conf
