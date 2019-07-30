@@ -1,14 +1,11 @@
-version: 3
+version: "3"
 
 services:
   cuckoo:
     image: hlcuckoo
-    command: daemon
+    command: -d
     ports:
       - "2042:2042"
-    volumes:
-      - ./cuckoo-tmp/:/tmp/cuckoo-tmp/
-      - ./storage/:/cuckoo/storage/
     networks:
       - cuckoo
     env_file:
@@ -16,87 +13,24 @@ services:
 
   web:
     image: hlcuckoo
+    command: web runserver 0.0.0.0:8080
     ports:
-      - "80:31337"
-    links:
-      - mongo
-      - elasticsearch
-      - postgres
-    command: web
-    volumes:
-      - ./cuckoo-tmp/:/tmp/cuckoo-tmp/
-      - ./storage/:/cuckoo/storage/
+      - "8080:8080"
     networks:
       - cuckoo
     env_file:
       - ./files/config.env
 
   api:
-    depends_on:
-      - postgres
     image: hlcuckoo
+    command: api --host 0.0.0.0 --port 8000
     ports:
-      - "8000:1337"
-    links:
-      - postgres
-    command: api
-    volumes:
-      - ./cuckoo-tmp/:/tmp/cuckoo-tmp/
-      - ./storage/:/cuckoo/storage/
+      - "8000:8000"
     networks:
       - cuckoo
     env_file:
       - ./files/config.env
 
-  # nginx:
-  #   build: nginx/.
-  #   depends_on:
-  #     - mongo
-  #   ports:
-  #     - "80:80"
-  #   links:
-  #     - mongo
-  #   networks:
-  #     - cuckoo
-
-  mongo:
-    image: mongo
-    ports:
-      - 27017
-    volumes:
-      - mongo-data:/data/db
-    networks:
-      - cuckoo
-
-  elasticsearch:
-    image: blacktop/elasticsearch:5.6
-    ports:
-      - 9200
-    volumes:
-      - es-data:/usr/share/elasticsearch/data
-    networks:
-      - cuckoo
-
-  postgres:
-    image: postgres
-    ports:
-      - 5432
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: cuckoo
-      PGDATA: /var/lib/postgresql/data/pgdata
-      # POSTGRES_INITDB_ARGS: --data-checksums
-    volumes:
-      - postgres-data:/var/lib/postgresql/data/pgdata
-    networks:
-      - cuckoo
-
 networks:
   cuckoo:
     driver: bridge
-
-volumes:
-  cuckoo-data:
-  mongo-data:
-  es-data:
-  postgres-data:

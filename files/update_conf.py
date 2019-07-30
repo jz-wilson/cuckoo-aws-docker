@@ -23,6 +23,12 @@ with open(".cuckoo/conf/reporting.conf", 'w') as cfile:
         reporting_cfg.set('mongodb', 'host', os.environ['MONGO_HOST'])
     if os.environ.get('MONGO_TCP_PORT'):
         reporting_cfg.set('mongodb', 'port', os.environ['MONGO_TCP_PORT'])
+    if os.environ.get('MONGO_DATABASE'):
+        reporting_cfg.set('mongodb', 'db', os.environ['MONGO_DATABASE'])
+    if os.environ.get('MONGO_USER'):
+        reporting_cfg.set('mongodb', 'username', os.environ['MONGO_USER'])
+    if os.environ.get('MONGO_PASSWORD'):
+        reporting_cfg.set('mongodb', 'password', os.environ['MONGO_PASSWORD'])
 
     reporting_cfg.write(cfile)
 
@@ -35,8 +41,11 @@ with open(".cuckoo/conf/cuckoo.conf", 'w') as cfile:
         cuckoo_cfg.set('resultserver', 'port', os.environ['RESULTSERVER_PORT'])
     if os.environ.get('MACHINERY'):
         cuckoo_cfg.set('cuckoo', 'machinery', os.environ['MACHINERY'])
-    if os.environ.get('DATABASE_CONNECTION'):
-        cuckoo_cfg.set('database', 'connection', os.environ['DATABASE_CONNECTION'])
+    if os.environ.get('POSTGRES_HOST'):
+        cuckoo_cfg.set(
+            'database',
+            'connection',
+            "postgresql://%s:%s@%s:%s/%s" % (os.environ['POSTGRES_USER'], os.environ['POSTGRES_PASSWORD'], os.environ['POSTGRES_HOST'], os.environ['POSTGRES_TCP_PORT'], os.environ['POSTGRES_DATABASE']))
     if os.environ.get('VBOX_IGNORE_VULNERABILITIES'):
         cuckoo_cfg.set('cuckoo', 'ignore_vulnerabilities', os.environ['VBOX_IGNORE_VULNERABILITIES'])
     if os.environ.get('API_TOKEN'):
