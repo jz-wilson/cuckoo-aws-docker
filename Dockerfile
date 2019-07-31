@@ -12,7 +12,7 @@ ENV CUCKOO=$CUCKOO_DIR/.cuckoo \
 RUN apt-get update && \
     apt-get install --no-install-recommends -yqq \
 # Install Essentials
-    build-essential git netcat tcpdump libcap2-bin supervisor virtualenv python-dev libpq-dev python-magic libffi-dev libssl-dev libjpeg-dev zlib1g-dev \
+    build-essential git curl netcat tcpdump libcap2-bin supervisor virtualenv python-dev libpq-dev python-magic libffi-dev libssl-dev libjpeg-dev zlib1g-dev \
 # Install M2Crypto dependecies
     swig \
 # Install Guacd
