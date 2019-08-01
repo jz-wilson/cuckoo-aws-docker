@@ -47,4 +47,4 @@ setUpCuckoo
 
 cuckoo community
 
-exec "${VIRTUAL_ENV}/bin/cuckoo" "$@"
+exec cuckoo "$@"
