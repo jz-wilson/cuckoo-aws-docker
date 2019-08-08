@@ -6,7 +6,7 @@
                 "aws_secret_access_key": String(),
                 "machines": List(String, ""),
                 "interface": String("eth0"),
-                "running_machines_gap": Int(1)
+                "running_machines_gap": Int(0)
             },
             "autoscale": {
                 "autoscale": Boolean(False),
