@@ -48,3 +48,7 @@ setUpCuckoo
 cuckoo community
 
 exec cuckoo "$@"
+
+if [[ $? -neq 0 ]]; then
+  exit 1
+fi
