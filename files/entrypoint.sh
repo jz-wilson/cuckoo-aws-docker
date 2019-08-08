@@ -47,7 +47,6 @@ setUpCuckoo
 
 cuckoo community
 
-if ! pgrep -x "cuckoo";then
 exec cuckoo "$@"
-fi
+
 
