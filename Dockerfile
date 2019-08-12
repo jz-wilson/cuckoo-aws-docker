@@ -59,5 +59,5 @@ RUN python stuff/monitor.py && \
 
 COPY files/entrypoint.sh files/update_conf.py /
 
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["--help"]
+#ENTRYPOINT ["/entrypoint.sh"]
+#CMD ["--help"]
