@@ -50,7 +50,9 @@ with open(".cuckoo/conf/cuckoo.conf", 'w') as cfile:
         cuckoo_cfg.set(
             'database',
             'connection',
-            "postgresql://%s:%s@%s:%s/%s" % (os.environ['POSTGRES_USER'], os.environ['POSTGRES_PASSWORD'], os.environ['POSTGRES_HOST'], os.environ['POSTGRES_TCP_PORT'], os.environ['POSTGRES_DATABASE']))
+            "postgresql://%s:%s@%s:%s/%s" % (
+            os.environ['POSTGRES_USER'], os.environ['POSTGRES_PASSWORD'], os.environ['POSTGRES_HOST'],
+            os.environ['POSTGRES_TCP_PORT'], os.environ['POSTGRES_DATABASE']))
     if os.environ.get('VBOX_IGNORE_VULNERABILITIES'):
         cuckoo_cfg.set('cuckoo', 'ignore_vulnerabilities', os.environ['VBOX_IGNORE_VULNERABILITIES'])
     if os.environ.get('API_TOKEN'):
@@ -99,6 +101,9 @@ with open(".cuckoo/conf/processing.conf", 'w') as cfile:
 
     if os.environ.get('ENABLE_SURICATA'):
         processing_cfg.set('suricata', 'enabled', os.environ['ENABLE_SURICATA'])
+
+    if os.environ.get('ENABLE_VIRUSTOTAL'):
+        processing_cfg.set('virustotal', 'enabled', os.environ['ENABLE_VIRUSTOTAL'])
 
     processing_cfg.write(cfile)
 
